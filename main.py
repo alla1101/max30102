@@ -10,7 +10,8 @@ parser.add_argument("-t", "--time", type=int, default=30,
 args = parser.parse_args()
 
 print('sensor starting...')
-hrm = HeartRateMonitor(print_raw=args.raw, print_result=(not args.raw))
+#hrm = HeartRateMonitor(print_raw=args.raw, print_result=(not args.raw))
+hrm = HeartRateMonitor()
 hrm.start_sensor()
 count=1000
 i=0

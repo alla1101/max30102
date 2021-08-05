@@ -15,12 +15,15 @@ hrm = HeartRateMonitor()
 hrm.start_sensor()
 count=1000
 i=0
-while True:
-    i=i+1
-    time.sleep(250)
-    ss=hrm.get_data()
-    print(ss)
-    if i == count:
-        break
+try:
+    while True:
+        i=i+1
+        time.sleep(0.25)
+        ss=hrm.get_data()
+        print(ss)
+        if i == count:
+            break
+except KeyboardInterrupt:
+    hrm.stop_sensor()
 
 hrm.stop_sensor()

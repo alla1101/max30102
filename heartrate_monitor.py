@@ -15,6 +15,11 @@ class HeartRateMonitor(object):
 
     def __init__(self, print_raw=False, print_result=False):
         self.bpm = 0
+        self.spo2=0
+        self.finger_on=False
+        self.sensor_data = {'valid_spo2': False, 'finger_on': False, "bpm":0,"spo2":0}
+        self.sensor_ready_data=self.sensor_data
+
         if print_raw is True:
             print('IR, Red')
         self.print_raw = print_raw
@@ -55,12 +60,25 @@ class HeartRateMonitor(object):
                             self.bpm = 0
                             if self.print_result:
                                 print("Finger not detected")
+                                self.finger_on=False
                         if self.print_result:
                             print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
+                        
+                        self.sensor_data["finger_on"]=self.finger_on
+                        self.sensor_data["bpm"]=self.bpm
+                        self.sensor_data["valid_spo2"]=self.finger_on & valid_spo2
+                        if self.sensor_data["valid_spo2"]:
+                            self.sensor_data["spo2"]=spo2
+                        else:
+                            self.sensor_data["spo2"]=0
+                    self.sensor_ready_data=self.sensor_data                        
 
             time.sleep(self.LOOP_TIME)
 
         sensor.shutdown()
+
+    def get_data(self):
+        return self.sensor_ready_data
 
     def start_sensor(self):
         self._thread = threading.Thread(target=self.run_sensor)

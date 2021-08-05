@@ -4,7 +4,7 @@ from heartrate_monitor import HeartRateMonitor
 import time
 
 THINGSBOARD_HOST = '192.168.1.101'
-ACCESS_TOKEN = 'RASPBERRY_PI_DO_TOKE'
+ACCESS_TOKEN = 'T2_TEST_TOKEN'
 
 sensor_data = {'valid_spo2': False, 'finger_on': False, "bpm":0,"spo2":0}
 

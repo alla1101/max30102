@@ -18,7 +18,7 @@ hrm = HeartRateMonitor()
 hrm.start_sensor()
 next_reading = time.time() 
 INTERVAL=0.25
-
+client.loop_start()
 try:
     while True:
         sensor_data_1=hrm.get_data()

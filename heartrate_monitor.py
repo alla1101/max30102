@@ -52,6 +52,7 @@ class HeartRateMonitor(object):
                 if len(ir_data) == 100:
                     bpm, valid_bpm, spo2, valid_spo2 = hrcalc.calc_hr_and_spo2(ir_data, red_data)
                     if valid_bpm:
+                        self.finger_on=True
                         bpms.append(bpm)
                         while len(bpms) > 4:
                             bpms.pop(0)

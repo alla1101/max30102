@@ -22,6 +22,7 @@ INTERVAL=0.25
 try:
     while True:
         sensor_data=hrm.get_data()
+        print(sensor_data)
         client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
 
         next_reading += INTERVAL

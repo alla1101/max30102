@@ -21,8 +21,12 @@ INTERVAL=0.25
 
 try:
     while True:
-        sensor_data=hrm.get_data()
-        print(sensor_data)
+        sensor_data_1=hrm.get_data()
+        print(sensor_data_1)
+        sensor_data["valid_spo2"]=sensor_data_1["valid_spo2"]
+        sensor_data["finger_on"]=sensor_data_1["finger_on"]
+        sensor_data["bpm"]=round(sensor_data_1["bpm"],2)
+        sensor_data["spo2"]=round(sensor_data_1["spo2"],2)
         client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
 
         next_reading += INTERVAL

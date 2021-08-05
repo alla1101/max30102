@@ -65,9 +65,9 @@ class HeartRateMonitor(object):
                         if self.print_result:
                             print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
                         
-                    self.sensor_data["finger_on"]=self.finger_on & self.bpm!=0
+                    self.sensor_data["finger_on"]=self.finger_on and not self.bpm==0
                     self.sensor_data["bpm"]=self.bpm
-                    self.sensor_data["valid_spo2"]=self.finger_on & valid_spo2
+                    self.sensor_data["valid_spo2"]=self.finger_on and valid_spo2
                     if self.sensor_data["valid_spo2"]:
                         self.sensor_data["spo2"]=spo2
                     else:

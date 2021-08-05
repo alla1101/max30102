@@ -1,29 +1,37 @@
+import paho.mqtt.client as mqtt
+import json
 from heartrate_monitor import HeartRateMonitor
 import time
-import argparse
 
-parser = argparse.ArgumentParser(description="Read and print data from MAX30102")
-parser.add_argument("-r", "--raw", action="store_true",
-                    help="print raw data instead of calculation result")
-parser.add_argument("-t", "--time", type=int, default=30,
-                    help="duration in seconds to read from sensor, default 30")
-args = parser.parse_args()
+THINGSBOARD_HOST = '192.168.1.101'
+ACCESS_TOKEN = 'RASPBERRY_PI_DEMO_TOKEN'
 
-print('sensor starting...')
-#hrm = HeartRateMonitor(print_raw=args.raw, print_result=(not args.raw))
+sensor_data = {'valid_spo2': False, 'finger_on': False, "bpm":0,"spo2":0}
+
+
+client = mqtt.Client()
+
+client.username_pw_set(ACCESS_TOKEN)
+
+client.connect(THINGSBOARD_HOST, 1883, 60)
 hrm = HeartRateMonitor()
 hrm.start_sensor()
-count=1000
-i=0
+next_reading = time.time() 
+INTERVAL=0.25
+
 try:
     while True:
-        i=i+1
-        time.sleep(0.25)
-        ss=hrm.get_data()
-        print(ss)
-        if i == count:
-            break
-except KeyboardInterrupt:
-    hrm.stop_sensor()
+        sensor_data=hrm.get_data()
+        client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
 
+        next_reading += INTERVAL
+        sleep_time = next_reading-time.time()
+        if sleep_time > 0:
+            time.sleep(sleep_time)
+
+except KeyboardInterrupt:
+    pass
+
+client.loop_stop()
+client.disconnect()
 hrm.stop_sensor()
